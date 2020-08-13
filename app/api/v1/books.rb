@@ -5,6 +5,7 @@ module V1
       desc '一覧'
       get '/' do
         @books = Book.all
+        present @books, with: V1::Entities::BookEntity
       end
 
       desc '詳細'
@@ -13,6 +14,7 @@ module V1
       end
       get '/:id' do
         @books = Book.find(params[:id])
+        present @book, with: V1::Entities::BookEntity
       end
 
       desc '作成'
@@ -27,6 +29,14 @@ module V1
           price: params[:price],
           author_id: params[:author_id]
         )
+
+        if @book.save
+          status 201
+          present @book, with: V1::Entities::BookEntity
+        else
+          status 400
+          present @book.errors
+        end
       end
     end
   end

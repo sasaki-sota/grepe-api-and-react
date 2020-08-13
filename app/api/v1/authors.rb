@@ -5,6 +5,7 @@ module V1
       desc '一覧'
       get '/' do
         @authors = Author.all
+        present @authors, with: V1::Entities::AuthorEntity # @authors を V1::Entities::AuthorEntityを使用して返却する
       end
 
       desc '詳細'
@@ -13,6 +14,7 @@ module V1
       end
       get '/:id' do
         @author = Author.find_by(id: params[:id])
+        present @author, with: V1::Entities::AuthorEntity
       end
 
       desc '作成'
@@ -21,6 +23,14 @@ module V1
       end
       post '/' do
         @author = Author.create(name: params[:name])
+
+        if @author.save
+          status 201
+          present @author, with: V1::Entities::AuthorEntity
+        else
+          status 400
+          present @author.errors.full_messages
+        end
       end
 
       desc '削除'
@@ -30,6 +40,13 @@ module V1
       delete '/:id' do
         @author = Author.find_by(id: params[:id])
         @author.destroy
+        if @author.destroy
+          status 204
+          present nil
+        else
+          status 400
+          present @author.errors.full_messages
+        end
       end
     end
   end
