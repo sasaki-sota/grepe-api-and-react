@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from 'axios';
+import BooksContainer from "./BooksContainer";
 
 const MainContainer = (props) => {
     const [books, setBooks] = useState([]);
@@ -15,7 +16,7 @@ const MainContainer = (props) => {
 
     return (
         <div className="app-main">
-
+            <BooksContainer bookData={books}/>
         </div>
     )
 };
