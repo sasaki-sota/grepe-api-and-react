@@ -1,29 +1,28 @@
 module V1
   class Books < Grape::API
     resources :books do
-
-      desc '一覧'
-      get '/' do
+      desc "一覧"
+      get "/" do
         @books = Book.all
         present @books, with: V1::Entities::BookEntity
       end
 
-      desc '詳細'
+      desc "詳細"
       params do
         requires :id, type: Integer
       end
-      get '/:id' do
+      get "/:id" do
         @books = Book.find(params[:id])
         present @book, with: V1::Entities::BookEntity
       end
 
-      desc '作成'
+      desc "作成"
       params do
         requires :title, type: String
         requires :price, type: Integer
         requires :author_id, type: Integer
       end
-      post '/' do
+      post "/" do
         @books = Book.create(
           title: params[:title],
           price: params[:price],

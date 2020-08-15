@@ -1,27 +1,26 @@
 module V1
   class Authors < Grape::API
     resources :authors do
-
-      desc '一覧'
-      get '/' do
+      desc "一覧"
+      get "/" do
         @authors = Author.all
         present @authors, with: V1::Entities::AuthorEntity # @authors を V1::Entities::AuthorEntityを使用して返却する
       end
 
-      desc '詳細'
+      desc "詳細"
       params do
         requires :id, type: Integer
       end
-      get '/:id' do
+      get "/:id" do
         @author = Author.find_by(id: params[:id])
         present @author, with: V1::Entities::AuthorEntity
       end
 
-      desc '作成'
+      desc "作成"
       params do
         requires :name, type: String
       end
-      post '/' do
+      post "/" do
         @author = Author.create(name: params[:name])
 
         if @author.save
@@ -33,11 +32,11 @@ module V1
         end
       end
 
-      desc '削除'
+      desc "削除"
       params do
         requires :id, type: Integer
       end
-      delete '/:id' do
+      delete "/:id" do
         @author = Author.find_by(id: params[:id])
         @author.destroy
         if @author.destroy
